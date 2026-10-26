@@ -1,0 +1,6 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),G=require('../src/dock-geometry.cjs');
+const base={anchor:{x:700,y:8},mainSize:{width:660,height:500},compactSize:{width:344,height:48},expandedSize:{width:370,height:352},expanded:false,edge:'top',mode:'all',work:{x:0,y:0,width:1920,height:1080}};
+test('顶部反复展开收回始终恢复同一锚点',()=>{const collapsed=G.arrange(base);for(let i=0;i<20;i++){G.arrange({...base,expanded:true});assert.deepEqual(G.arrange(base),collapsed);}assert.equal(collapsed.activity.y,8);});
+test('三种贴靠显示、侧边和负坐标显示器保持可见',()=>{for(const edge of ['top','left','right'])for(const mode of ['capsule','first','all'])for(const expanded of [true,false]){const work={x:-1920,y:0,width:1920,height:1080},p=G.arrange({...base,work,edge,mode,expanded}),b=G.bounds(p,mode!=='capsule');assert.ok(b.x>=work.x&&b.x+b.width<=work.x+work.width);assert.ok(b.y>=0&&b.y+b.height<=work.height);if(mode==='first')assert.equal(p.main.height,148);}});
+test('吸附阈值与刷新率上限',()=>{assert.equal(G.detect({x:8,y:200,width:344},base.work),'left');assert.equal(G.detect({x:200,y:200,width:344},base.work),null);assert.equal(G.targetRate('auto',165),165);assert.equal(G.targetRate('240',144),144);assert.equal(G.targetRate('60',165),60);assert.equal(G.targetRate('auto',0),60);});

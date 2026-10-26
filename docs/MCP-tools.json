@@ -1,0 +1,468 @@
+[
+  {
+    "name": "qingjian_info",
+    "title": "qingjian_info",
+    "description": "Get local date, time zone, ordering and current revision.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "qingjian_list_tasks",
+    "title": "qingjian_list_tasks",
+    "description": "List tasks with optional filters and offset pagination.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "done": {
+          "type": "boolean"
+        },
+        "parentId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "query": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 50000
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "qingjian_get_task",
+    "title": "qingjian_get_task",
+    "description": "Read one task and its children.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "qingjian_add_task",
+    "title": "qingjian_add_task",
+    "description": "Create a root task or one-level child; missing date defaults to the local date.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "parentId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "dueAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 40,
+          "description": "ISO 8601 timestamp with explicit Z or UTC offset; null clears it."
+        },
+        "remindAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 40,
+          "description": "ISO 8601 timestamp with explicit Z or UTC offset; null clears it."
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Unique UUID for this mutation; reuse the identical request on retry."
+        },
+        "expectedRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Revision returned by info/list/get; stale revisions are rejected."
+        }
+      },
+      "required": [
+        "title",
+        "requestId",
+        "expectedRevision"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "qingjian_update_task",
+    "title": "qingjian_update_task",
+    "description": "Update title/date/deadline/reminder. A child follows its parent date.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "dueAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 40,
+          "description": "ISO 8601 timestamp with explicit Z or UTC offset; null clears it."
+        },
+        "remindAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 40,
+          "description": "ISO 8601 timestamp with explicit Z or UTC offset; null clears it."
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Unique UUID for this mutation; reuse the identical request on retry."
+        },
+        "expectedRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Revision returned by info/list/get; stale revisions are rejected."
+        }
+      },
+      "required": [
+        "id",
+        "requestId",
+        "expectedRevision"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "qingjian_set_completed",
+    "title": "qingjian_set_completed",
+    "description": "Explicitly complete or reopen a task; applies the existing parent/child rules.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "done": {
+          "type": "boolean"
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Unique UUID for this mutation; reuse the identical request on retry."
+        },
+        "expectedRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Revision returned by info/list/get; stale revisions are rejected."
+        }
+      },
+      "required": [
+        "id",
+        "done",
+        "requestId",
+        "expectedRevision"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "qingjian_set_pinned",
+    "title": "qingjian_set_pinned",
+    "description": "Pin or unpin a root task.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "pinned": {
+          "type": "boolean"
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Unique UUID for this mutation; reuse the identical request on retry."
+        },
+        "expectedRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Revision returned by info/list/get; stale revisions are rejected."
+        }
+      },
+      "required": [
+        "id",
+        "pinned",
+        "requestId",
+        "expectedRevision"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "qingjian_move_task",
+    "title": "qingjian_move_task",
+    "description": "Move into/out of a parent or position within a manual ordering group. One child level only.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "parentId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "pinned": {
+          "type": "boolean"
+        },
+        "beforeId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "afterId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Unique UUID for this mutation; reuse the identical request on retry."
+        },
+        "expectedRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Revision returned by info/list/get; stale revisions are rejected."
+        }
+      },
+      "required": [
+        "id",
+        "parentId",
+        "requestId",
+        "expectedRevision"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "qingjian_reorder_tasks",
+    "title": "qingjian_reorder_tasks",
+    "description": "Set the complete order of one manual group; obtain all IDs before calling.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 1,
+          "maxItems": 2000,
+          "uniqueItems": true
+        },
+        "parentId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "pinned": {
+          "type": "boolean"
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Unique UUID for this mutation; reuse the identical request on retry."
+        },
+        "expectedRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Revision returned by info/list/get; stale revisions are rejected."
+        }
+      },
+      "required": [
+        "ids",
+        "requestId",
+        "expectedRevision"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "qingjian_delete_task",
+    "title": "qingjian_delete_task",
+    "description": "Delete a task and all its children. Ask the user for confirmation in the client/Skill before calling. The server does not add a second dialog.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Unique UUID for this mutation; reuse the identical request on retry."
+        },
+        "expectedRevision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Revision returned by info/list/get; stale revisions are rejected."
+        }
+      },
+      "required": [
+        "id",
+        "requestId",
+        "expectedRevision"
+      ],
+      "additionalProperties": false
+    },
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  }
+]

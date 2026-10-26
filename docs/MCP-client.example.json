@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "qingjian": {
+      "url": "http://127.0.0.1:49321/mcp",
+      "headers": {"Authorization": "Bearer <COPY_FROM_QINGJIAN>"}
+    }
+  }
+}

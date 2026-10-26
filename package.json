@@ -1,0 +1,18 @@
+{
+  "name": "qingjian-desktop",
+  "productName": "轻笺",
+  "version": "2.1.0-beta.2",
+  "private": true,
+  "description": "Windows 桌面任务、胶囊贴靠与托盘提醒",
+  "main": "src/main.cjs",
+  "scripts": {
+    "check": "node tools/check.cjs",
+    "test": "node --test",
+    "build": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build.ps1"
+  },
+  "license": "UNLICENSED",
+  "upstream": {
+    "repository": "https://github.com/Shoewashingmachine/Todo-duo",
+    "version": "1.5.0"
+  }
+}
