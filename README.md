@@ -2,6 +2,9 @@
 
 Windows 桌面待办工具，基于 TodoDuo 1.5.0 的独立定制开发版。
 
+## 下载
+最新 MCP Windows x64 便携包：[QingJian-2.1.0-beta.2-MCP-Windows-x64.zip](https://github.com/Qingmin666/qingjian-desktop/releases/download/v2.1.0-beta.2/QingJian-2.1.0-beta.2-MCP-Windows-x64.zip)（Beta 预发布）。[Release 说明与 SHA-256](https://github.com/Qingmin666/qingjian-desktop/releases/tag/v2.1.0-beta.2)。
+
 ## 功能
 - 中文界面、悬停说明、任务反馈。
 - 手动拖拽与 Alt＋上下方向键排序；按截止时间、创建时间或标题自动排序。
