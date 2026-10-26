@@ -91,4 +91,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/build.ps1 -RuntimeRoot
 上游仓库未声明整体许可证。轻笺的公开分发依据维护者另行取得的许可；具体范围和条件由维护者保管。本仓库不将 Electron 许可证视为 TodoDuo 或轻笺整体许可证，也未在此声明面向第三方的使用许可。
 第三方运行时、Koffi 与辅助程序保留各自声明。原包的 PingFang 字体不加入新的源码包或发行包，默认使用 Windows 已安装字体。
 
-计划使用独立的私有 GitHub 仓库；不上传 data、缓存或测试配置。仓库创建和推送尚未执行。
+轻笺桌面软件源码已发布在 [qingjian-desktop](https://github.com/Qingmin666/qingjian-desktop) 公开仓库；对应的 Skill 独立发布在 [qingjian-skill](https://github.com/Qingmin666/qingjian-skill)。仓库不包含 data、缓存、运行包或测试配置。
